@@ -30,7 +30,25 @@ def is_valid_contact(contact: str) -> bool:
     Returns:
         bool: To‘g‘ri format bo‘lsa True, aks holda False.
     """
-    pass
+    if "|" not in contact:
+        return False
+
+    parts = contact.split("|")
+    if len(parts) != 3:
+        return False
+
+    name, phone, email = [p.strip() for p in parts]
+
+    if not name or not phone or not email:
+        return False
+
+    if not phone.isdigit():
+        return False
+
+    if "@" not in email:
+        return False
+
+    return True
 
 
 def add_contact(contact_list: List[str]) -> None:
@@ -40,7 +58,12 @@ def add_contact(contact_list: List[str]) -> None:
     Args:
         contact_list (List[str]): Kontaktlar ro‘yxati.
     """
-    pass
+    contact = input("Yangi kontakt kiriting (Ism|Telefon|Email): ").strip()
+    if is_valid_contact(contact):
+        contact_list.append(contact)
+        print(" Kontakt qo‘shildi!")
+    else:
+        print(" Xato format! To‘g‘ri yozing: Ism|Telefon|Email")
 
 
 def list_contacts(contact_list: List[str]) -> None:
@@ -50,7 +73,12 @@ def list_contacts(contact_list: List[str]) -> None:
     Args:
         contact_list (List[str]): Kontaktlar ro‘yxati.
     """
-    pass
+    if not contact_list:
+        print(" Kontaktlar ro‘yxati bo‘sh.")
+    else:
+        print(" Barcha kontaktlar:")
+        for c in contact_list:
+            print("•", c)
 
 
 def search_contact(contact_list: List[str]) -> None:
@@ -60,7 +88,15 @@ def search_contact(contact_list: List[str]) -> None:
     Args:
         contact_list (List[str]): Kontaktlar ro‘yxati.
     """
-    pass
+    name = input("Qidiriladigan ismni kiriting: ").strip().lower()
+    found = [c for c in contact_list if c.split("|")[0].strip().lower() == name]
+
+    if found:
+        print(" Topilgan kontaktlar:")
+        for c in found:
+            print("•", c)
+    else:
+        print(" Bunday ism topilmadi.")
 
 
 def filter_gmail_contacts(contact_list: List[str]) -> None:
@@ -70,7 +106,14 @@ def filter_gmail_contacts(contact_list: List[str]) -> None:
     Args:
         contact_list (List[str]): Kontaktlar ro‘yxati.
     """
-    pass
+    gmails = [c for c in contact_list if c.split("|")[2].strip().endswith("@gmail.com")]
+
+    if gmails:
+        print(" Gmail kontaktlar:")
+        for c in gmails:
+            print("•", c)
+    else:
+        print(" Gmail kontaktlar yo‘q.")
 
 
 def main() -> None:
@@ -82,7 +125,7 @@ def main() -> None:
 
     while True:
         show_menu()
-        choice = input("Tanlov (1–5): ").strip()
+        choice = input("Tanlov: ").strip()
 
         if choice == "1":
             add_contact(contacts)
@@ -93,10 +136,10 @@ def main() -> None:
         elif choice == "4":
             filter_gmail_contacts(contacts)
         elif choice == "5":
-            print("👋 Dasturni yakunlayapmiz. Xayr!")
+            print(" Dasturni yakunlayapmiz. Xayr!")
             break
         else:
-            print("❗️Noto‘g‘ri tanlov. Iltimos, 1 dan 5 gacha son kiriting.")
+            print("Noto‘g‘ri tanlov. Iltimos, 1 dan 5 gacha son kiriting.")
 
 
 main()
